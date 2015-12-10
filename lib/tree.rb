@@ -23,22 +23,30 @@ class Tree
 
   def insert_recursively(node, data)
     if data < node.data
+      insert_left(node, data)
+    elsif data > node.data
+      insert_right(node, data)
+    else
+      nil
+    end
+  end
+
+  def insert_left(node, data)
       if node.left
         insert_recursively(node.left, data)
       else
         node.left = BinaryNode.new(data, node.depth + 1)
         node.left.depth
       end
-    elsif data > node.data
+  end
+
+  def insert_right(node, data)
       if node.right
         insert_recursively(node.right, data)
       else
         node.right = BinaryNode.new(data, node.depth + 1)
         node.right.depth
       end
-    else
-      nil
-    end
   end
 
   def include?(data)
@@ -51,9 +59,9 @@ class Tree
 
   def depth_of_recursively(node, data)
     if !node
-      return nil
+      nil
     elsif data == node.data
-      return node.depth
+      node.depth
     elsif data < node.data
       depth_of_recursively(node.left, data)
     else
@@ -61,53 +69,41 @@ class Tree
     end
   end
 
-  def max
-    max_recursively(head)
-  end
-
-  def max_recursively(node)
+  def max (node = head)
     if !node
       nil
     elsif !node.right.nil?
-      max_recursively(node.right)
+      max(node.right)
     else
       node.data
     end
   end
 
-  def min
-    min_recursively(head)
-  end
-
-  def min_recursively(node)
+  def min (node = head)
     if !node
       nil
     elsif !node.left.nil?
-      min_recursively(node.left)
+      min(node.left)
     else
       node.data
     end
   end
 
-  def sort
-    sort_recursively(head)
-  end
-
-  def sort_recursively(node)
+  def sort (node = head)
     if !node
       []
     else
       [
-        sort_recursively(node.left),
+        sort(node.left),
         [ node.data ],
-        sort_recursively(node.right)
+        sort(node.right)
       ].flatten
     end
   end
 
   def load(read_file)
     count = 0
-    File.read(read_file).chomp.split.each do |number|
+    File.read(read_file).split.each do |number|
       if insert(number)
         count += 1
       end
@@ -115,40 +111,25 @@ class Tree
     count
   end
 
-  def leaves
-    leaves_recursively(head)
-  end
-
-  def leaves_recursively(node)
+  def leaves (node = head)
     if !node
       0
     elsif !node.left && !node.right
       1
     else
-      leaves_recursively(node.left) + leaves_recursively(node.right)
+      leaves(node.left) + leaves(node.right)
     end
   end
 
-  def height
-    height_recursively(head)
-  end
-
-  def height_recursively(node)
+  def height (node = head)
     if !node
       -1
     elsif !node.left && !node.right
       node.depth
     else
       [
-        height_recursively(node.left), height_recursively(node.right)
+        height(node.left), height(node.right)
       ].max
     end
   end
-end
-
-if __FILE__ == $0
-  tree = Tree.new
-  p tree.insert(10)
-
-
 end

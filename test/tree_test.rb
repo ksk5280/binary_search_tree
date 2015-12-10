@@ -1,6 +1,6 @@
-require 'minitest/autorun'  # => true
-require 'minitest/pride'    # => true
-require 'binary_node'       # ~> LoadError: cannot load such file -- binary_node
+require 'minitest/autorun'
+require 'minitest/pride'
+require 'binary_node'
 require 'tree'
 require 'pry'
 
@@ -19,7 +19,7 @@ class TreeTest < Minitest::Test
   end
 
   def test_insert_initializes_node
-    @tree.insert("m")
+    @tree.insert(10)
     assert_equal BinaryNode, @tree.head.class
   end
 
@@ -28,11 +28,13 @@ class TreeTest < Minitest::Test
     @tree.insert(12)
     @tree.insert(8)
     @tree.insert(5)
+    @tree.insert(15)
 
     assert_equal 10, @tree.head.data
     assert_equal 12, @tree.head.right.data
     assert_equal 8, @tree.head.left.data
     assert_equal 5, @tree.head.left.left.data
+    assert_equal 15, @tree.head.right.right.data
   end
 
   def test_inserted_node_returns_depth
@@ -40,6 +42,7 @@ class TreeTest < Minitest::Test
     assert_equal 1, @tree.insert(12)
     assert_equal 1, @tree.insert(8)
     assert_equal 2, @tree.insert(5)
+    assert_equal 2, @tree.insert(15)
   end
 
   def test_can_tell_whether_specific_data_is_included
@@ -47,6 +50,7 @@ class TreeTest < Minitest::Test
     @tree.insert(12)
     @tree.insert(8)
     @tree.insert(5)
+    @tree.insert(15)
 
     assert_equal true, @tree.include?(10)
     assert_equal false, @tree.include?(9)
@@ -54,6 +58,8 @@ class TreeTest < Minitest::Test
     assert_equal true, @tree.include?(8)
     assert_equal true, @tree.include?(5)
     assert_equal false, @tree.include?(0)
+    assert_equal true, @tree.include?(15)
+
   end
 
   def test_can_return_depth_of_piece_of_data
@@ -61,11 +67,14 @@ class TreeTest < Minitest::Test
     @tree.insert(12)
     @tree.insert(8)
     @tree.insert(5)
+    @tree.insert(15)
 
     assert_equal nil, @tree.depth_of(0)
     assert_equal 0, @tree.depth_of(10)
+    assert_equal 1, @tree.depth_of(12)
     assert_equal 1, @tree.depth_of(8)
     assert_equal 2, @tree.depth_of(5)
+    assert_equal 2, @tree.depth_of(15)
   end
 
   def test_can_return_max_value_in_tree
@@ -73,6 +82,8 @@ class TreeTest < Minitest::Test
     @tree.insert(12)
     @tree.insert(18)
     @tree.insert(15)
+    @tree.insert(8)
+    @tree.insert(5)
 
     assert_equal 18, @tree.max
   end
@@ -82,6 +93,8 @@ class TreeTest < Minitest::Test
     @tree.insert(1)
     @tree.insert(4)
     @tree.insert(15)
+    @tree.insert(8)
+    @tree.insert(5)
 
     assert_equal 1, @tree.min
   end
@@ -91,8 +104,10 @@ class TreeTest < Minitest::Test
     @tree.insert(1)
     @tree.insert(4)
     @tree.insert(15)
+    @tree.insert(8)
+    @tree.insert(5)
 
-    assert_equal [1,4,10,15], @tree.sort
+    assert_equal [1,4,5,8,10,15], @tree.sort
   end
 
   def test_can_load_numbers_and_return_unique_count
@@ -111,10 +126,3 @@ class TreeTest < Minitest::Test
     assert_equal 2, @tree.height
   end
 end
-
-# ~> LoadError
-# ~> cannot load such file -- binary_node
-# ~>
-# ~> /Users/kimiko/.rvm/rubies/ruby-2.2.1/lib/ruby/site_ruby/2.2.0/rubygems/core_ext/kernel_require.rb:54:in `require'
-# ~> /Users/kimiko/.rvm/rubies/ruby-2.2.1/lib/ruby/site_ruby/2.2.0/rubygems/core_ext/kernel_require.rb:54:in `require'
-# ~> /Users/kimiko/Documents/Turing/1module/projects/binary_search_tree/test/tree_test.rb:3:in `<main>'
