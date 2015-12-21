@@ -3,6 +3,7 @@ require 'minitest/pride'
 require 'binary_node'
 require 'tree'
 require 'pry'
+require_relative 'test_helper'
 
 class TreeTest < Minitest::Test
   def setup

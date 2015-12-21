@@ -1,7 +1,4 @@
 #!/usr/bin/ruby
-require 'pry-byebug'
-require 'pry-rescue'
-require 'pry'
 require_relative 'binary_node'
 
 class Tree
@@ -15,7 +12,7 @@ class Tree
   def insert(data)
     if head == nil
       @head = BinaryNode.new(data, 0)
-      0
+      return 0
     else
       insert_recursively(head, data)
     end
@@ -53,26 +50,22 @@ class Tree
     !depth_of(data).nil?
   end
 
-  def depth_of(data)
-    depth_of_recursively(head, data)
-  end
+  def depth_of(node = head, data)
+    return nil if !node
 
-  def depth_of_recursively(node, data)
-    if !node
-      nil
-    elsif data == node.data
-      node.depth
-    elsif data < node.data
-      depth_of_recursively(node.left, data)
+    return node.depth if data == node.data
+
+    if data < node.data
+      depth_of(node.left, data)
     else
-      depth_of_recursively(node.right, data)
+      depth_of(node.right, data)
     end
   end
 
   def max (node = head)
-    if !node
-      nil
-    elsif !node.right.nil?
+    return nil if !node
+
+    if !node.right.nil?
       max(node.right)
     else
       node.data
@@ -80,9 +73,9 @@ class Tree
   end
 
   def min (node = head)
-    if !node
-      nil
-    elsif !node.left.nil?
+    return nil if !node
+
+    if !node.left.nil?
       min(node.left)
     else
       node.data
@@ -93,43 +86,39 @@ class Tree
     if !node
       []
     else
-      [
-        sort(node.left),
-        [ node.data ],
-        sort(node.right)
-      ].flatten
+      [ sort(node.left), [ node.data ], sort(node.right) ].flatten
     end
   end
 
   def load(read_file)
-    count = 0
-    File.read(read_file).split.each do |number|
-      if insert(number)
-        count += 1
-      end
+    count = File.read(read_file).split.count do |number|
+      insert(number)
     end
-    count
   end
 
   def leaves (node = head)
-    if !node
-      0
-    elsif !node.left && !node.right
-      1
-    else
-      leaves(node.left) + leaves(node.right)
-    end
+    return 0 if !node
+
+    return 1 if !node.left && !node.right
+
+    else leaves(node.left) + leaves(node.right)
   end
 
   def height (node = head)
-    if !node
-      -1
-    elsif !node.left && !node.right
+    return -1 if !node
+
+    if !node.left && !node.right
       node.depth
     else
-      [
-        height(node.left), height(node.right)
-      ].max
+      [ height(node.left), height(node.right) ].max
     end
   end
+end
+
+if __FILE__ == $0
+  tree = Tree.new
+  tree.insert("m")
+  tree.insert("c")
+  tree.insert("q")
+  tree.insert("a")
 end

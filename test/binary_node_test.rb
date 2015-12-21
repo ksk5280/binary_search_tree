@@ -2,6 +2,7 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require 'binary_node'
 require 'tree'
+require_relative 'test_helper'
 
 class BinaryNodeTest < Minitest::Test
   def setup
